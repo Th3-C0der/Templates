@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Configure the Gemini API
 genai.configure(api_key='YOUR_GEMINI_API_KEY')
-model = genai.GenerativeModel('gemini-pro')
+model = genai.GenerativeModel('gemini-1.0-pro')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
