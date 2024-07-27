@@ -1,0 +1,36 @@
+<!-- Gemini API Demo Template By Th3-C0der-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini API Flask App By Th3-C0der</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Gemini API Demo</h1>
+    <form id="promptForm">
+        <textarea id="prompt" rows="4" cols="50" placeholder="Enter your prompt here"></textarea>
+        <br>
+        <button type="submit">Generate Response</button>
+    </form>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('promptForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const prompt = document.getElementById('prompt').value;
+            const responseDiv = document.getElementById('response');
+            responseDiv.innerHTML = 'Generating response...';
+            
+            try {
+                const response = await axios.post('/', new URLSearchParams({ prompt: prompt }));
+                responseDiv.innerHTML = response.data.response;
+            } catch (error) {
+                responseDiv.innerHTML = 'An error occurred. Please try again.';
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
