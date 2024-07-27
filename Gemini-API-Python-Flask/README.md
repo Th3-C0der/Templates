@@ -50,7 +50,7 @@ Contributions to this project are welcome. Please feel free to fork the reposito
 
 ## License
 
-This project is open source and available under the [MIT License](./LICENSE).
+This project is open source and available under the [MIT License](../LICENSE).
 
 ## Acknowledgements
 
