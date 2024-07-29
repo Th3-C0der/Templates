@@ -4,33 +4,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini API Flask App By Th3-C0der</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Th3-C0der's Template Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        .chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .chat-box p {
+            margin: 5px 0;
+        }
+        .user-input {
+            display: flex;
+        }
+        .user-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .user-input button {
+            padding: 10px 20px;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Gemini API Demo</h1>
-    <form id="promptForm">
-        <textarea id="prompt" rows="4" cols="50" placeholder="Enter your prompt here"></textarea>
-        <br>
-        <button type="submit">Generate Response</button>
-    </form>
-    <div id="response"></div>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box"></div>
+        <form class="user-input" id="chat-form">
+            <input type="text" id="prompt" placeholder="Type your message here..." required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
 
     <script>
-        document.getElementById('promptForm').addEventListener('submit', async (e) => {
+        const chatForm = document.getElementById('chat-form');
+        const chatBox = document.getElementById('chat-box');
+        const promptInput = document.getElementById('prompt');
+
+        chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const prompt = document.getElementById('prompt').value;
-            const responseDiv = document.getElementById('response');
-            responseDiv.innerHTML = 'Generating response...';
-            
-            try {
-                const response = await axios.post('/', new URLSearchParams({ prompt: prompt }));
-                responseDiv.innerHTML = response.data.response;
-            } catch (error) {
-                responseDiv.innerHTML = 'An error occurred. Please try again.';
-                console.error(error);
-            }
+            const prompt = promptInput.value;
+            displayMessage('User', prompt);
+            promptInput.value = '';
+
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt })
+            });
+
+            const data = await response.json();
+            displayMessage('Bot', data.response);
         });
+
+        function displayMessage(sender, message) {
+            const messageElement = document.createElement('p');
+            messageElement.textContent = `${sender}: ${message}`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
     </script>
 </body>
 </html>
