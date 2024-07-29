@@ -20,10 +20,15 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .chat-box {
-            height: 300px;
+            height: 70%;
+            width: 100%;
             overflow-y: auto;
             border: 1px solid #ddd;
             padding: 10px;
@@ -36,6 +41,7 @@
         }
         .user-input {
             display: flex;
+            width: 100%;
         }
         .user-input input {
             flex: 1;
@@ -55,9 +61,10 @@
 </head>
 <body>
     <div class="chat-container">
+        <h1>Th3-C0der's Template AI</h1>
         <div class="chat-box" id="chat-box"></div>
         <form class="user-input" id="chat-form">
-            <input type="text" id="prompt" placeholder="Type your message here..." required>
+            <input type="text" id="prompt" placeholder="Type your message here...">
             <button type="submit">Send</button>
         </form>
     </div>
@@ -73,16 +80,24 @@
             displayMessage('User', prompt);
             promptInput.value = '';
 
-            const response = await fetch('/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ prompt })
-            });
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ prompt })
+                });
 
-            const data = await response.json();
-            displayMessage('Bot', data.response);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                displayMessage('Bot', data.response);
+            } catch (error) {
+                displayMessage('Bot', 'Sorry, there was an error processing your request.');
+            }
         });
 
         function displayMessage(sender, message) {
